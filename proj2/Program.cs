@@ -40,16 +40,6 @@ namespace proj2
 
                 app.UseSwaggerUI();
 
-                try
-                {
-                    var dbContext = app.Services.CreateScope().ServiceProvider.GetRequiredService<HRContext>();
-                    dbContext.Database.Migrate();
-                }
-                catch (Exception ex)
-                {
-                    // Handle the exception as needed
-                    Console.WriteLine($"Error applying migrations: {ex.Message}");
-                }
             }
 
             app.UseHttpsRedirection();
