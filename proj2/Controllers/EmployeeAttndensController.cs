@@ -54,9 +54,9 @@ namespace proj2.Controllers
 
         // GET: api/EmployeeAttndens/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EmployeeAttndens>> GetEmployeeAttndens(int id )
+        public async Task<ActionResult<EmployeeAttndens>> GetEmployeeAttndens(int id)
         {
-            // var employeeAttndens = await _context.EmployeesAttndens.FindAsync(id);
+          
             var employeeAttndens = await _context.EmployeesAttndens.Where(a => a.empID == id).FirstOrDefaultAsync();
 
 
@@ -99,15 +99,8 @@ namespace proj2.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEmployeeAttndens(int id, EmployeeAttndens employeeAttndens)
         {
-            //var employee = await _context.EmployeesAttndens.FindAsync(id);
             var employee = await _context.EmployeesAttndens.Where(a => a.empID == id).FirstOrDefaultAsync();
-            if (employee == null)  return BadRequest(); 
-            //if (id != employeeAttndens.id)
-            //{
-            //    return BadRequest();
-            //}
-
-            // _context.Entry(employeeAttndens).State = EntityState.Modified;
+            if (employee == null) return BadRequest();
 
             employee.Date = employeeAttndens.Date;
             employee.Attendens = employeeAttndens.Attendens;
@@ -172,24 +165,18 @@ namespace proj2.Controllers
             return NoContent();
         }
 
-
-
-
-
-
-
-
-        // POST: api/EmployeeAttndens
+       // POST: api/EmployeeAttndens
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<EmployeeAttndens>> PostEmployeeAttndens(EmployeeAttndens emppost)
         {               
             var employee = await _context.Employees.FindAsync(emppost.empID);
+            
             if (employee == null)
             {
                 return NotFound("Employee not found.");
             }
-
+            
             var newEmployeeAttndens = new EmployeeAttndens
             {    
                 Employee=employee,
@@ -204,6 +191,7 @@ namespace proj2.Controllers
             
             return CreatedAtAction("GetEmployeesAttndens", new { id = newEmployeeAttndens.id }, newEmployeeAttndens); 
         }
+
 
        
 

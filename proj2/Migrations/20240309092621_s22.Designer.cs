@@ -12,8 +12,8 @@ using proj2.Models;
 namespace proj2.Migrations
 {
     [DbContext(typeof(HRContext))]
-    [Migration("20240307182507_mai")]
-    partial class mai
+    [Migration("20240309092621_s22")]
+    partial class s22
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,6 +162,25 @@ namespace proj2.Migrations
                     b.HasIndex("employeeID");
 
                     b.ToTable("netSalaries");
+                });
+
+            modelBuilder.Entity("proj2.Models.Setting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("HolidayDayOne")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HolidayDayTwo")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("proj2.Models.EmployeeAttndens", b =>

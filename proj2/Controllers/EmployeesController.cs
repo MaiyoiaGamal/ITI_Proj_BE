@@ -12,11 +12,11 @@ namespace proj2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesTestController : ControllerBase
+    public class EmployeesController : ControllerBase
     {
         private readonly HRContext _context;
 
-        public EmployeesTestController(HRContext context)
+        public EmployeesController(HRContext context)
         {
             _context = context;
         }
@@ -134,6 +134,11 @@ namespace proj2.Controllers
         [HttpPost]
         public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
         {
+            if (await _context.Employees.AnyAsync(e => e.FullName == employee.FullName))
+            {
+                return Conflict("Employee with the same name already exists.");
+            }
+
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
 
