@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace proj2.Models
 {
-    public class HRContext:DbContext    
+    public class HRContext:IdentityDbContext<ApplicationUser>   
     {
         public HRContext() : base() { }
         public HRContext(DbContextOptions<HRContext> options) : base(options)
@@ -19,6 +21,26 @@ namespace proj2.Models
         //{
         //    optionsBuilder.UseSqlServer("Server=DESKTOP-FIK5SPH\\SQLEXPRESS;Database=Hrproj;Trusted_connection=True;TrustServerCertificate=True;Integrated Security=True");
         //}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<NetSalary>()
+                .Property(ns => ns.netsalary)
+                .HasColumnType("decimal(18,2)");
+            base.OnModelCreating(modelBuilder);
+
+            // Explicitly configure the primary key for IdentityUserLogin
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(u => new { u.LoginProvider, u.ProviderKey });
+        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+
+        //    // Explicitly configure the primary key for IdentityUserLogin
+        //    modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(u => new { u.LoginProvider, u.ProviderKey });
+        //}
+
+
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
