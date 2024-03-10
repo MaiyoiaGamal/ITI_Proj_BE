@@ -22,8 +22,8 @@ namespace proj2.Repos
 
             #region num of days & hoidays
             int daysInMonth = DateTime.DaysInMonth(year, month);
-            int OfficialHolidays = this.CountofHolidays(year, month, db.Holidays.Select(h => h.Date).ToList());
-            int FirstWeekend = this.CountDayOfWeekInMonth(year, month,(int) db.Settings.Select(s => s.HolidayDayOne).SingleOrDefault());
+            int OfficialHolidays = this.CountofHolidays(year, month , db.Holidays.Select(h => h.Date).ToList());
+            int FirstWeekend = this.CountDayOfWeekInMonth(year, month ,(int) db.Settings.Select(s => s.HolidayDayOne).SingleOrDefault());
             int SecondWeekend = this.CountDayOfWeekInMonth(year, month, (int)db.Settings.Select(s => s.HolidayDayTwo).SingleOrDefault());
             int Requiredattendance = daysInMonth - (OfficialHolidays + FirstWeekend + SecondWeekend ); 
             #endregion
