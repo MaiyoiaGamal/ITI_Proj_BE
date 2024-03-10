@@ -10,8 +10,6 @@ namespace proj2.Models
         [Key]
         public int id{ get; set; }
         public DateOnly Date { get; set; }
-        //public TimeOnly fixedAttendse { get;  } = new TimeOnly(09,00,00);
-        //public TimeOnly fixedDeperture { get; } = new TimeOnly(18,00,00);
         [Required]
         public TimeOnly Attendens { get; set; }
         [Required]

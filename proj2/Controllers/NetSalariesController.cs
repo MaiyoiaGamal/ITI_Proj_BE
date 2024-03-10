@@ -360,7 +360,7 @@ namespace proj2.Controllers
 
                     salariesDTOs.Add(salaryDTO);
                 }
-
+                
                 return Ok(salariesDTOs);
             }
             catch (Exception ex)
