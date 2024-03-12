@@ -5,7 +5,7 @@
 namespace proj2.Migrations
 {
     /// <inheritdoc />
-    public partial class p9 : Migration
+    public partial class s25 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

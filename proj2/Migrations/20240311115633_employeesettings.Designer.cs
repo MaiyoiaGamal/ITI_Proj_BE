@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using proj2.Models;
 
@@ -11,9 +12,11 @@ using proj2.Models;
 namespace proj2.Migrations
 {
     [DbContext(typeof(HRContext))]
-    partial class HRContextModelSnapshot : ModelSnapshot
+    [Migration("20240311115633_employeesettings")]
+    partial class employeesettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,12 +271,17 @@ namespace proj2.Migrations
                     b.Property<decimal>("Salary")
                         .HasColumnType("money");
 
+                    b.Property<int?>("SettingId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Sex")
                         .IsRequired()
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SettingId");
 
                     b.ToTable("Employees");
                 });
@@ -428,6 +436,15 @@ namespace proj2.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("proj2.Models.Employee", b =>
+                {
+                    b.HasOne("proj2.Models.Setting", "Setting")
+                        .WithMany()
+                        .HasForeignKey("SettingId");
+
+                    b.Navigation("Setting");
                 });
 
             modelBuilder.Entity("proj2.Models.EmployeeAttndens", b =>

@@ -138,7 +138,10 @@ namespace proj2.Controllers
             {
                 return Conflict("Employee with the same name already exists.");
             }
-
+            if(await _context.Employees.AnyAsync(e=>e.SSN == employee.SSN))
+            {
+                return Conflict("SSN Must Be UNIQUE");
+            }
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
 

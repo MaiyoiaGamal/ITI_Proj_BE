@@ -27,14 +27,14 @@ namespace proj2.Controllers
         {
             var employeeAttndens = await _context.EmployeesAttndens.ToListAsync();
 
-            
+
             var groupedAttndens = employeeAttndens.GroupBy(e => e.empID);
 
             var employeeAttndensDTOs = groupedAttndens.Select(group =>
             {
                 var emp = _context.Employees.Find(group.Key);
                 var listOfAttendes = group.Select(e => new ListOfAttendes
-                { 
+                {
                     Date = e.Date,
                     Attendens = e.Attendens,
                     Deperture = e.Deperture
@@ -56,7 +56,7 @@ namespace proj2.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeAttndens>> GetEmployeeAttndens(int id)
         {
-          
+
             var employeeAttndens = await _context.EmployeesAttndens.Where(a => a.empID == id).FirstOrDefaultAsync();
 
 
@@ -69,7 +69,7 @@ namespace proj2.Controllers
         }
 
         [HttpGet("{id}/{date}/getbydateandid")]
-        public async Task<ActionResult<EmployeeAttndens>> GetempByDateandID(int id , string date)
+        public async Task<ActionResult<EmployeeAttndens>> GetempByDateandID(int id, string date)
         {
             if (!DateOnly.TryParse(date, out DateOnly parsedStartDate))
             {
@@ -130,9 +130,9 @@ namespace proj2.Controllers
         public async Task<IActionResult> PutEmployeeAttndens2(int id, string date, EmployeeAttndens employeeAttndens)
         {
             if (!DateOnly.TryParse(date, out DateOnly parsedDate)) ;
-            
-                //var employee = await _context.EmployeesAttndens.FindAsync(id);
-             var employee = await _context.EmployeesAttndens.Where(a => a.empID == id && a.Date == parsedDate).FirstOrDefaultAsync();
+
+            //var employee = await _context.EmployeesAttndens.FindAsync(id);
+            var employee = await _context.EmployeesAttndens.Where(a => a.empID == id && a.Date == parsedDate).FirstOrDefaultAsync();
 
             if (employee == null) return BadRequest();
             //if (id != employeeAttndens.id)
@@ -165,40 +165,72 @@ namespace proj2.Controllers
             return NoContent();
         }
 
-       // POST: api/EmployeeAttndens
+        // POST: api/EmployeeAttndens
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<EmployeeAttndens>> PostEmployeeAttndens(EmployeeAttndens emppost)
-        {               
-            var employee = await _context.Employees.FindAsync(emppost.empID);
+        {
             
+
+
+            if (emppost.Date.DayOfWeek == DayOfWeek.Friday || emppost.Date.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    return BadRequest("Attendance cannot be posted on weekends.");
+                }
+            
+
+
+            if (IsHoliday(emppost.Date))
+            {
+                return BadRequest("Attendance cannot be posted on holidays.");
+            }
+
+            var employee = await _context.Employees.FindAsync(emppost.empID);
+
             if (employee == null)
             {
                 return NotFound("Employee not found.");
             }
-            
+            var existingAttendance = await _context.EmployeesAttndens
+             .FirstOrDefaultAsync(e => e.empID == emppost.empID && e.Date == emppost.Date);
+
+            if (existingAttendance != null)
+            {
+                return BadRequest("Attendance for the same date already exists.");
+            }
+
             var newEmployeeAttndens = new EmployeeAttndens
-            {    
-                Employee=employee,
+            {
+                Employee = employee,
                 Date = emppost.Date,
                 Attendens = emppost.Attendens,
-                Deperture = emppost.Deperture    
+                Deperture = emppost.Deperture
             };
 
             _context.EmployeesAttndens.Add(newEmployeeAttndens);
             await _context.SaveChangesAsync();
 
-            
-            return CreatedAtAction("GetEmployeesAttndens", new { id = newEmployeeAttndens.id }, newEmployeeAttndens); 
+
+            return CreatedAtAction("GetEmployeesAttndens", new { id = newEmployeeAttndens.id }, newEmployeeAttndens);
         }
 
+        //fn of date
+        private bool IsHoliday(DateOnly date)
+        {
+            var holidays = _context.Holidays.ToList();
 
-       
+            foreach (var holiday in holidays)
+            {
+                if (date.Day == holiday.Date.Day)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-
-
-        // DELETE: api/EmployeeAttndens/5
-        [HttpDelete("{id}")]
+    // DELETE: api/EmployeeAttndens/5
+    [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployeeAttndens(int id)
         {
             var employeeAttndens = await _context.EmployeesAttndens.FindAsync(id);
