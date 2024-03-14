@@ -26,23 +26,30 @@ namespace proj2.Controllers
 
         //create account
         [HttpPost("Register")]
-        public async Task <IActionResult> Registertion(RegisterDTO Userdto)
+        public async Task<IActionResult> Registertion(RegisterDTO Userdto)
         {
             if (ModelState.IsValid)
             {
-               ApplicationUser user = new ApplicationUser();
+                if (Userdto.Password != Userdto.PasswordConfirmed)
+                {
+                    return BadRequest("The password and confirm password do not match.");
+                }
+
+                ApplicationUser user = new ApplicationUser();
                 user.Email = Userdto.Email;
                 user.UserName = Userdto.UserName;
-                IdentityResult result= await usermanger.CreateAsync(user, Userdto.Password);
-                  if (result.Succeeded)
-                {
-                    return Ok("Account successfully added");
-                }
-                  return BadRequest(result.Errors);
-            }
-            return BadRequest(ModelState);
 
+                IdentityResult result = await usermanger.CreateAsync(user, Userdto.Password);
+
+                if (result.Succeeded)
+                    return Ok("Account successfully added");
+                else
+                    return BadRequest(result.Errors);
+            }
+
+            return BadRequest(ModelState);
         }
+
 
         //check account valid login
         [HttpPost("login")]
