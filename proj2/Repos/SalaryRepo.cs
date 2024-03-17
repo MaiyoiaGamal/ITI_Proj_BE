@@ -38,15 +38,19 @@ namespace proj2.Repos
                 addedhours += (this.SubtractTimes(item.Deperture, emp_dismissal));
                 subtractedhours += (this.SubtractTimes(emp_arrival, item.Attendens));
             }
-            #endregion
+            #endregion 
 
 
             #region salary
             int dayRate = this.RateOfSalaryPerDay((int)(emp.Salary), Requiredattendance);
             int hourRate = this.RateofSalaryPerHour((int)(emp.Salary), Requiredattendance, emp_dismissal, emp_arrival);
+            //genral settings 
+            var genrallate = db.Settings.Select(s => s.Late).FirstOrDefault();
+            var genralplus = db.Settings.Select(s => s.Plus).FirstOrDefault();
 
-            int addedsalary = addedhours * hourRate;
-            int subsalary = subtractedhours * hourRate;
+
+            int addedsalary = addedhours * hourRate * genralplus ;
+            int subsalary = subtractedhours * hourRate * genrallate;
 
 
             decimal Salary = emp.Salary - (dayRate * (Requiredattendance - logs.Count())) + addedsalary - subsalary;
@@ -87,9 +91,6 @@ namespace proj2.Repos
             }
             return weekDayCount;
         }
-
-
-
 
 
         private int CountofHolidays(int year, int month, List<DateOnly> dates)
