@@ -231,21 +231,25 @@ namespace proj2.Controllers
             return false;
         }
 
-    // DELETE: api/EmployeeAttndens/5
-    [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployeeAttndens(int id)
+        // DELETE: api/EmployeeAttndens/5
+        [HttpDelete("{employeeId}/attendance/{date}")]
+        public async Task<IActionResult> DeleteEmployeeAttendance(int employeeId, string date)
         {
-            var employeeAttndens = await _context.EmployeesAttndens.FindAsync(id);
-            if (employeeAttndens == null)
+            DateOnly.TryParse(date,out DateOnly parsed);
+            var employeeAttendance = await _context.EmployeesAttndens
+            .FirstOrDefaultAsync(e => e.empID == employeeId && e.Date == parsed);
+
+            if (employeeAttendance == null)
             {
                 return NotFound();
             }
 
-            _context.EmployeesAttndens.Remove(employeeAttndens);
+            _context.EmployeesAttndens.Remove(employeeAttendance);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
+
 
         private bool EmployeeAttndensExists(int id)
         {
