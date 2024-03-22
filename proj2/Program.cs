@@ -52,11 +52,11 @@ namespace proj2
 
             builder.Services.AddCors(options =>
                  {
-                options.AddPolicy(txt,
+                options.AddPolicy("MyCorsPolicy",
                 builder =>
                 {
 
-                    builder.AllowAnyOrigin();
+                    builder.WithOrigins("http://localhost:4200");
                    // builder.WithOrigins();
                     builder.AllowAnyMethod();
                     builder.AllowAnyHeader();
@@ -74,10 +74,9 @@ namespace proj2
             }
 
             app.UseHttpsRedirection();
-          
+            app.UseCors("MyCorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCors(txt);
 
             app.MapControllers();
 

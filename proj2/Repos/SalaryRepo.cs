@@ -53,7 +53,7 @@ namespace proj2.Repos
             int subsalary = subtractedhours * hourRate * genrallate;
 
 
-            decimal Salary = emp.Salary - (dayRate * (Requiredattendance - logs.Count())) + addedsalary - subsalary;
+            decimal Salary = emp.Salary - (dayRate * (Requiredattendance - logs.Count())) + addedsalary - Math.Abs(subsalary);
 
 
             #endregion
@@ -138,6 +138,24 @@ namespace proj2.Repos
             }
             return HourT1 - HourT2;
         }
+
+        //private int SubtractTimes(TimeOnly t1, TimeOnly t2)
+        //{
+        //    int HourT1 = t1.Hour;
+        //    if (t1.Minute != 0)
+        //    {
+        //        HourT1 += 1;
+        //    }
+
+        //    int HourT2 = t2.Hour;
+        //    if (t2.Minute != 0)
+        //    {
+        //        HourT2 += 1;
+        //    }
+
+        //    return HourT1 - HourT2;
+        //}
+
 
     }
 }

@@ -170,10 +170,12 @@ namespace proj2.Controllers
         [HttpPost]
         public async Task<ActionResult<EmployeeAttndens>> PostEmployeeAttndens(EmployeeAttndens emppost)
         {
-            
+            var holidayday1 = _context.Settings.Select(s => s.HolidayDayOne).FirstOrDefault();
+            var holidayday2 = _context.Settings.Select(s => s.HolidayDayTwo).FirstOrDefault();
 
 
-            if (emppost.Date.DayOfWeek == DayOfWeek.Friday || emppost.Date.DayOfWeek == DayOfWeek.Saturday)
+
+            if (emppost.Date.DayOfWeek == holidayday1 || emppost.Date.DayOfWeek == holidayday2)
                 {
                     return BadRequest("Attendance cannot be posted on weekends.");
                 }
