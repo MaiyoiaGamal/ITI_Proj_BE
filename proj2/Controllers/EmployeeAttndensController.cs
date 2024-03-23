@@ -207,6 +207,21 @@ namespace proj2.Controllers
                 return BadRequest("Attendance for the same date already exists.");
             }
 
+            if (emppost.Date.Year < 2020)
+            {
+                return BadRequest("Can't select date before 2020");
+            }
+
+            if (emppost.Attendens < new TimeOnly (9,00,00))
+            {
+                return BadRequest("Can't select time before 9:00:00");
+            }
+
+            if (emppost.Deperture < new TimeOnly(18, 00, 00))
+            {
+                return BadRequest("Can't select time before 18:00:00");
+            }
+
             var newEmployeeAttndens = new EmployeeAttndens
             {
                 Employee = employee,
