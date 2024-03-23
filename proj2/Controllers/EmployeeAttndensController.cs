@@ -27,7 +27,8 @@ namespace proj2.Controllers
         {
             var employeeAttndens = await _context.EmployeesAttndens.ToListAsync();
 
-
+            var lattime = new TimeOnly(18, 0, 0);
+            var plustime = new TimeOnly(9,0, 0);
             var groupedAttndens = employeeAttndens.GroupBy(e => e.empID);
 
             var employeeAttndensDTOs = groupedAttndens.Select(group =>
@@ -37,7 +38,11 @@ namespace proj2.Controllers
                 {
                     Date = e.Date,
                     Attendens = e.Attendens,
-                    Deperture = e.Deperture
+                    Deperture = e.Deperture,
+                    plus = (e.Deperture - lattime).Hours,
+                    late = (e.Attendens - plustime).Hours
+                    
+                    
                 }).ToList();
 
                 return new EmployeeAttndensDTO
@@ -45,6 +50,7 @@ namespace proj2.Controllers
                     id = group.Key,
                     name = emp.FullName,
                     ListOfAttendes = listOfAttendes
+                    
                 };
             }).ToList();
 

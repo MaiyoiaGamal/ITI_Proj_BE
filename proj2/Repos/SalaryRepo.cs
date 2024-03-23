@@ -42,36 +42,35 @@ namespace proj2.Repos
 
 
             #region salary
-            int dayRate = this.RateOfSalaryPerDay((int)(emp.Salary), Requiredattendance);
-            int hourRate = this.RateofSalaryPerHour((int)(emp.Salary), Requiredattendance, emp_dismissal, emp_arrival);
+            float dayRate = this.RateOfSalaryPerDay((float)(emp.Salary), Requiredattendance);
+            float hourRate = this.RateofSalaryPerHour((float)(emp.Salary), Requiredattendance, emp_dismissal, emp_arrival);
             //genral settings 
             var genrallate = db.Settings.Select(s => s.Late).FirstOrDefault();
             var genralplus = db.Settings.Select(s => s.Plus).FirstOrDefault();
 
 
-            int addedsalary = addedhours * hourRate * genralplus ;
-            int subsalary = subtractedhours * hourRate * genrallate;
+            float addedsalary = addedhours * hourRate * genralplus ;
+            float subsalary = subtractedhours * hourRate * genrallate;
+            float salary = (float)emp.Salary;
 
-
-            decimal Salary = emp.Salary - (dayRate * (Requiredattendance - logs.Count())) + addedsalary - Math.Abs(subsalary);
+            float Salary = (salary - (dayRate * (Requiredattendance - logs.Count())) + addedsalary - Math.Abs(subsalary));
 
 
             #endregion
-
-
+            
 
             #region return DTO
             NewSalaryDTO reportDTO = new NewSalaryDTO()
             {
                 emp_name = emp.FullName,
                 Salary = (int)emp.Salary,
-                OverallSalary = (int)Salary,
+                OverallSalary =(int) Salary,
                 AttendaceDays = logs.Count(),
                 AbsenceDays = Requiredattendance - logs.Count(),
                 AddedHours = addedhours,
                 lateHours = subtractedhours,
-                AddedSalary = addedsalary,
-                SubtractedSalary = subsalary
+                AddedSalary =(int) addedsalary,
+                SubtractedSalary =(int) subsalary
             };
             return reportDTO;
             #endregion
@@ -106,12 +105,12 @@ namespace proj2.Repos
             return count;
         }
 
-        private int RateOfSalaryPerDay(int Salary, int CountofDays)
+        private float RateOfSalaryPerDay(float Salary, float CountofDays)
         {
             return Salary / CountofDays;
         }
 
-        private int RateofSalaryPerHour(int Salary, int CountofDays, TimeOnly Dissmisal, TimeOnly Arrival)
+        private float RateofSalaryPerHour(float Salary, float CountofDays, TimeOnly Dissmisal, TimeOnly Arrival)
         {
             return Salary / (CountofDays * this.SubtractTimes(Dissmisal, Arrival));
         }
