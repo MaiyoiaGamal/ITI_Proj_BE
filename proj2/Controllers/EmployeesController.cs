@@ -235,11 +235,13 @@ namespace proj2.Controllers
                     .Where(a => a.Date >= parsedStartDate && a.Date <= parsedEndDate)
                     .ToList();
 
-                int plusHours = 0;
-                int lateHours = 0;
+               
 
                 foreach (var item in existAttendance)
                 {
+                    int plusHours = 0;
+                    int lateHours = 0;
+
                     if (item.Deperture > fixedDepartureTime)
                     {
                         plusHours = (item.Deperture - fixedDepartureTime).Hours;
