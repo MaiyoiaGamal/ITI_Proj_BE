@@ -25,7 +25,9 @@ namespace proj2.Repos
             int OfficialHolidays = this.CountofHolidays(year, month , db.Holidays.Select(h => h.Date).ToList());
             int FirstWeekend = this.CountDayOfWeekInMonth(year, month ,(int) db.Settings.Select(s => s.HolidayDayOne).SingleOrDefault());
             int SecondWeekend = this.CountDayOfWeekInMonth(year, month, (int)db.Settings.Select(s => s.HolidayDayTwo).SingleOrDefault());
-            int Requiredattendance = daysInMonth - (OfficialHolidays + FirstWeekend + SecondWeekend ); 
+            int Requiredattendance = daysInMonth - (OfficialHolidays + FirstWeekend + SecondWeekend );
+            //int Requiredattendance = daysInMonth - ( FirstWeekend + SecondWeekend );
+
             #endregion
 
 
@@ -48,6 +50,10 @@ namespace proj2.Repos
             var genrallate = db.Settings.Select(s => s.Late).FirstOrDefault();
             var genralplus = db.Settings.Select(s => s.Plus).FirstOrDefault();
 
+            float genralholidydayssalary = 0;
+             genralholidydayssalary = OfficialHolidays * dayRate;
+
+
 
             float addedsalary = addedhours * hourRate * genralplus ;
             float subsalary = subtractedhours * hourRate * genrallate;
@@ -64,7 +70,7 @@ namespace proj2.Repos
             {
                 emp_name = emp.FullName,
                 Salary = (int)emp.Salary,
-                OverallSalary =(int) Salary,
+                OverallSalary =(int) Salary + (int) genralholidydayssalary,
                 AttendaceDays = logs.Count(),
                 AbsenceDays = Requiredattendance - logs.Count(),
                 AddedHours = addedhours,

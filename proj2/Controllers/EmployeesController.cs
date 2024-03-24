@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using System;
 
 namespace proj2.Controllers
 {
@@ -234,10 +235,23 @@ namespace proj2.Controllers
                     .Where(a => a.Date >= parsedStartDate && a.Date <= parsedEndDate)
                     .ToList();
 
+                int plusHours = 0;
+                int lateHours = 0;
+
                 foreach (var item in existAttendance)
                 {
-                    item.plus = (int)(item.Deperture - fixedDepartureTime).TotalHours;
-                    item.late = (int)(item.Attendens - fixedAttendanceTime).TotalHours;
+                    if (item.Deperture > fixedDepartureTime)
+                    {
+                        plusHours = (item.Deperture - fixedDepartureTime).Hours;
+                    }
+
+                    if (item.Deperture < fixedDepartureTime)
+                    {
+                        lateHours = (item.Attendens - fixedAttendanceTime).Hours + (fixedDepartureTime - item.Deperture).Hours;
+                    }
+
+                    item.plus = plusHours;
+                    item.late = lateHours;
                    
 
                     _context.Update(item);
