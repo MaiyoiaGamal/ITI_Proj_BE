@@ -80,13 +80,14 @@ namespace proj2.Controllers
                     if (e.Deperture > lattime)
                     {
                         plusHours = (e.Deperture - lattime).Hours;
+                    } else                                  
+                         lateHours = (e.Attendens - plustime).Hours + ((lattime - e.Deperture).Hours);
+                    
+                    if (e.Attendens > plustime)
+                    {
+                        lateHours = (e.Attendens - plustime).Hours;
                     }
 
-                    if ( e.Deperture < lattime) 
-                    {
-                        lateHours = (e.Attendens - plustime).Hours + (lattime - e.Deperture).Hours;
-                    }
-                   
                     return new ListOfAttendes
                     {
                         Date = e.Date,
@@ -224,6 +225,7 @@ namespace proj2.Controllers
             employee.Date = employeeAttndens.Date;
             employee.Attendens = employeeAttndens.Attendens;
             employee.Deperture = employeeAttndens.Deperture;
+            
 
             try
             {

@@ -242,16 +242,29 @@ namespace proj2.Controllers
                     int plusHours = 0;
                     int lateHours = 0;
 
+                    //if (item.Deperture > fixedDepartureTime)
+                    //{
+                    //    plusHours = (item.Deperture - fixedDepartureTime).Hours;
+                    //}
+
+                    //if (item.Deperture < fixedDepartureTime)
+                    //{
+                    //    lateHours = (item.Attendens - fixedAttendanceTime).Hours + (fixedDepartureTime - item.Deperture).Hours;
+                    //}
                     if (item.Deperture > fixedDepartureTime)
                     {
                         plusHours = (item.Deperture - fixedDepartureTime).Hours;
                     }
-
-                    if (item.Deperture < fixedDepartureTime)
+                    else if (item.Attendens > fixedAttendanceTime)
                     {
-                        lateHours = (item.Attendens - fixedAttendanceTime).Hours + (fixedDepartureTime - item.Deperture).Hours;
+                       
+                        lateHours = (item.Attendens - fixedAttendanceTime).Hours;
                     }
-
+                    else
+                    {
+                        
+                        lateHours = (fixedAttendanceTime - item.Attendens).Hours + (fixedDepartureTime - item.Deperture).Hours;
+                    }
                     item.plus = plusHours;
                     item.late = lateHours;
                    
@@ -270,8 +283,7 @@ namespace proj2.Controllers
                         Attendens = a.Attendens,
                         Deperture = a.Deperture,
                         plus = a.plus,
-                        late = a.late,
-                        
+                        late = a.late,                        
                         name = a.Employee.FullName
                     })
                     .ToList();
