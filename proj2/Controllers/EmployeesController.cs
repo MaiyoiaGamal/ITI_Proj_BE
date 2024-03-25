@@ -255,16 +255,17 @@ namespace proj2.Controllers
                     {
                         plusHours = (item.Deperture - fixedDepartureTime).Hours;
                     }
-                    else if (item.Attendens > fixedAttendanceTime)
-                    {
-                       
-                        lateHours = (item.Attendens - fixedAttendanceTime).Hours;
-                    }
                     else
                     {
-                        
-                        lateHours = (fixedAttendanceTime - item.Attendens).Hours + (fixedDepartureTime - item.Deperture).Hours;
+                        lateHours =  (fixedDepartureTime - item.Deperture).Hours;
                     }
+
+
+                    if (item.Attendens > fixedAttendanceTime)
+                    {
+                        lateHours += (item.Attendens - fixedAttendanceTime).Hours;
+                    }
+
                     item.plus = plusHours;
                     item.late = lateHours;
                    

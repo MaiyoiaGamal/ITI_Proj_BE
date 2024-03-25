@@ -80,13 +80,17 @@ namespace proj2.Controllers
                     if (e.Deperture > lattime)
                     {
                         plusHours = (e.Deperture - lattime).Hours;
-                    } else                                  
-                         lateHours = (e.Attendens - plustime).Hours + ((lattime - e.Deperture).Hours);
-                    
+                    }
+                    else
+                    {
+                        lateHours =  (lattime - e.Deperture).Hours;
+                    }
+
                     if (e.Attendens > plustime)
                     {
-                        lateHours = (e.Attendens - plustime).Hours;
+                        lateHours += (lattime - e.Deperture).Hours;
                     }
+
 
                     return new ListOfAttendes
                     {
